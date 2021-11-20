@@ -51,6 +51,17 @@ namespace ReunitePetsWebAPI.Services
 
             return pet;
         }
+        public void DeletePet(int petId)
+        {
+            Pet petToRemove = _context.Pets.SingleOrDefault(p => p.PetId == petId);
+
+            if(petToRemove != null)
+            {
+                _context.Pets.Remove(petToRemove);
+                _context.SaveChanges();
+            }
+        }
+
 
         public Task AddCommentForPet(int petId, Comment comment)
         {
@@ -62,10 +73,6 @@ namespace ReunitePetsWebAPI.Services
             throw new NotImplementedException();
         }
 
-        public void DeletePet(Pet pet)
-        {
-            throw new NotImplementedException();
-        }
 
         public Task<Comment> GetCommentForPet(int petId, int commentId)
         {

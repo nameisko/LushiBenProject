@@ -14,7 +14,7 @@ namespace ReunitePetsWebAPI.Services
         Task<Pet> GetPetById(int petId, bool includeComments);
         Task<Pet> AddPet(Pet pet);
         Task UpadatePetStatusByPetId(int petId, string status);
-        void DeletePet(Pet pet);
+        void DeletePet(int petId);
         // Comment
         Task<IEnumerable<Comment>> GetCommentsByPetId(int petId);
         Task<Comment> GetCommentForPet(int petId, int commentId);

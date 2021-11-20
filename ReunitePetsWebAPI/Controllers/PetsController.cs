@@ -80,5 +80,21 @@ namespace ReunitePetsWebAPI.Controllers
                 value: petCreated
             );
         }
+
+        // DELETE api/Pets/5
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<Pet>> DeletePet(int petId)
+        {
+            Pet pet = await _petRepository.GetPetById(petId, false);
+
+            if (pet == null)
+            {
+                return NotFound();
+            }
+
+            _petRepository.DeletePet(petId);
+
+            return Ok(pet);
+        }
     }
 }
