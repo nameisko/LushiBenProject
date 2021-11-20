@@ -54,17 +54,21 @@ namespace ClassLibrary.Models
 
                 entity.Property(e => e.Description).HasMaxLength(500);
 
+                entity.Property(e => e.Image).HasMaxLength(500);
+
                 entity.Property(e => e.LastSeen)
                     .IsRequired()
                     .HasMaxLength(200);
 
-                entity.Property(e => e.PetImage).HasMaxLength(500);
-
-                entity.Property(e => e.PetName)
+                entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(50);
 
-                entity.Property(e => e.PetType)
+                entity.Property(e => e.Status)
+                    .IsRequired()
+                    .HasMaxLength(10);
+
+                entity.Property(e => e.Type)
                     .IsRequired()
                     .HasMaxLength(10);
             });

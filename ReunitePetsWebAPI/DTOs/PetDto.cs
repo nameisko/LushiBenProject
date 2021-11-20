@@ -1,17 +1,13 @@
-﻿using System;
+﻿using ClassLibrary.Models;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-#nullable disable
-
-namespace ClassLibrary.Models
+namespace ReunitePetsWebAPI.DTOs
 {
-    public partial class Pet
+    public class PetDto
     {
-        public Pet()
-        {
-            Comments = new HashSet<Comment>();
-        }
-
         public int PetId { get; set; }
         public string Name { get; set; }
         public string Status { get; set; }
@@ -22,6 +18,14 @@ namespace ClassLibrary.Models
         public string Description { get; set; }
         public string Contact { get; set; }
 
-        public virtual ICollection<Comment> Comments { get; set; }
+        public int NumberOfComments
+        {
+            get
+            {
+                return Comments.Count;
+            }
+        }
+
+        public ICollection<Comment> Comments { get; set; } = new List<Comment>();
     }
 }
