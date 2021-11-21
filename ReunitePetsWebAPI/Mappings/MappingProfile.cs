@@ -21,6 +21,7 @@ namespace ReunitePetsWebAPI.Mappings
             CreateMap<CommentCreateDto, Comment>();
             CreateMap<UserCredentialDto, AppUser>();
             CreateMap<AppUser, UserDto>();
+            CreateMap<CommentUpdateDto, Comment>();
         }
     }
 }

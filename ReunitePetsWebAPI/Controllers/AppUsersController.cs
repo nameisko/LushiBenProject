@@ -29,6 +29,8 @@ namespace ReunitePetsWebAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<AppUser>> CreateUser([FromBody] UserCredentialDto user)
         {
+            if (user == null) return BadRequest();
+
             bool isUserExist = await _userRepository.UserExists(user.Username);
 
             if (isUserExist)
@@ -64,7 +66,7 @@ namespace ReunitePetsWebAPI.Controllers
             }
             else
             {
-                return StatusCode(404, "Username or password is incorrect.");
+                return NotFound();
             }
         }
     }

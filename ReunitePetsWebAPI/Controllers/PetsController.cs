@@ -91,11 +91,13 @@ namespace ReunitePetsWebAPI.Controllers
         [HttpPut("{petId}")]
         public async Task<ActionResult<Pet>> UpadatePetStatusByPetId(int petId, [FromBody] PetWithoutIdDto pet)
         {
+            if (pet == null) return BadRequest();
+
             var petUpdateInfo = _mapper.Map<Pet>(pet);
 
             await _petRepository.UpadatePetByPetId(petId, petUpdateInfo);
 
-            return StatusCode(200, "Pet's status is updated successfully.");
+            return StatusCode(200, "Pet information is updated successfully.");
         }
     }
 }

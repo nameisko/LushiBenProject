@@ -17,19 +17,19 @@ namespace ReunitePetsWebAPI.Controllers
     public class CommentsController : ControllerBase
     {
         private readonly IMapper _mapper;
-        private IPetRepository _petRepository;
+        private ICommentRepository _commentRepository;
 
-        public CommentsController(IPetRepository petRepository, IMapper mapper)
+        public CommentsController(ICommentRepository commentRepository, IMapper mapper)
         {
             _mapper = mapper;
-            _petRepository = petRepository;
+            _commentRepository = commentRepository;
         }
 
         // GET: /Comments?petId=1
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Comment>>> GetCommentsByPetId(int petId)
         {
-            var comments = await _petRepository.GetCommentsByPetId(petId);
+            var comments = await _commentRepository.GetCommentsByPetId(petId);
 
             var results = _mapper.Map<IEnumerable<CommentDto>>(comments);
 
@@ -46,9 +46,9 @@ namespace ReunitePetsWebAPI.Controllers
             var commentToInsert = _mapper.Map<Comment>(comment);
             commentToInsert.CommentDate = DateTime.Now;
 
-            await _petRepository.AddComment(commentToInsert);
+            await _commentRepository.AddComment(commentToInsert);
 
-            if (!await _petRepository.Save())
+            if (!await _commentRepository.Save())
             {
                 return StatusCode(500, "A problem occured while processing the request");
             }
@@ -60,25 +60,40 @@ namespace ReunitePetsWebAPI.Controllers
         [HttpGet("{commentId}")]
         public async Task<ActionResult<IEnumerable<Comment>>> GetCommentsById(int commentId)
         {
-            var comments = await _petRepository.GetCommentById(commentId);
+            var comments = await _commentRepository.GetCommentById(commentId);
+
+            if (comments == null)
+            {
+                return NotFound();
+            }
 
             var results = _mapper.Map<CommentDto>(comments);
 
             return Ok(results);
         }
 
+        [HttpPut("{commentId}")]
+        public async Task<ActionResult<Pet>> UpdateCommentByCommentId(int commentId, [FromBody] CommentUpdateDto comment)
+        {
+            var petUpdateInfo = _mapper.Map<Comment>(comment);
+
+            await _commentRepository.UpdateComment(commentId, petUpdateInfo);
+
+            return StatusCode(200, "Comment is updated successfully.");
+        }
+
         // DELETE api/Comments/5
         [HttpDelete("{commentId}")]
         public async Task<ActionResult<Pet>> DeleteComment(int commentId)
         {
-            Comment comment = await _petRepository.GetCommentById(commentId);
+            Comment comment = await _commentRepository.GetCommentById(commentId);
 
             if (comment == null)
             {
                 return NotFound();
             }
 
-            await _petRepository.DeleteComment(commentId);
+            await _commentRepository.DeleteComment(commentId);
 
             return Ok(comment);
         }
