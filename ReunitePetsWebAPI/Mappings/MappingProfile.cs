@@ -12,10 +12,11 @@ namespace ReunitePetsWebAPI.Mappings
     {
         public MappingProfile()
         {
-            CreateMap<Pet, PetWithoutCommentsDto>(); //map from cityInfo to cityWithoutPointsOfInterestDto
+            CreateMap<Pet, PetWithoutCommentsDto>();
             CreateMap<PetWithoutCommentsDto, Pet>();
             CreateMap<PetWithoutIdDto, Pet>();
             CreateMap<Pet, PetDto>();
+            CreateMap<PetStatusUpdateDto, Pet>();
         }
     }
 }

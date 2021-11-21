@@ -40,6 +40,7 @@ namespace ReunitePetsWebAPI.Services
             {
                 result = _context.Pets.Where(p => p.PetId == petId);
             }
+            result = _context.Pets.Where(p => p.PetId == petId);
 
             return await result.FirstOrDefaultAsync();
         }
@@ -51,14 +52,25 @@ namespace ReunitePetsWebAPI.Services
 
             return pet;
         }
-        public void DeletePet(int petId)
+        public async void DeletePet(int petId)
         {
-            Pet petToRemove = _context.Pets.SingleOrDefault(p => p.PetId == petId);
+            Pet petToRemove = await _context.Pets.SingleOrDefaultAsync(p => p.PetId == petId);
 
             if(petToRemove != null)
             {
                 _context.Pets.Remove(petToRemove);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        public async Task UpadatePetStatusByPetId(int petId, string status)
+        {
+            Pet petToUpdate = await _context.Pets.SingleOrDefaultAsync(p => p.PetId == petId);
+
+            if(petToUpdate != null)
+            {
+                petToUpdate.Status = status;
+                await _context.SaveChangesAsync();
             }
         }
 
@@ -87,16 +99,6 @@ namespace ReunitePetsWebAPI.Services
         public async Task<bool> Save()
         {
             return (await _context.SaveChangesAsync()) > 0;
-        }
-
-        public Task UpadatePetStatusByPetId(int petId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task UpadatePetStatusByPetId(int petId, string status)
-        {
-            throw new NotImplementedException();
         }
     }
 }

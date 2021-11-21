@@ -37,20 +37,14 @@ namespace ReunitePetsWebAPI.Controllers
         }
 
         // GET: api/Pets/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Pet>> GetPetById(int petId, bool includeComments)
+        [HttpGet("{petId}")]
+        public async Task<ActionResult<Pet>> GetPetById(int petId)
         {
-            var pet = await _petRepository.GetPetById(petId, includeComments);
+            var pet = await _petRepository.GetPetById(petId, false);
 
             if(pet == null)
             {
                 return NotFound();
-            }
-            if (includeComments)
-            {
-                var petResult = _mapper.Map<Pet>(pet);
-
-                return Ok(petResult);
             }
 
             var petWithoutCommentsResult = _mapper.Map<PetWithoutCommentsDto>(pet);
@@ -82,7 +76,7 @@ namespace ReunitePetsWebAPI.Controllers
         }
 
         // DELETE api/Pets/5
-        [HttpDelete("{id}")]
+        [HttpDelete("{petId}")]
         public async Task<ActionResult<Pet>> DeletePet(int petId)
         {
             Pet pet = await _petRepository.GetPetById(petId, false);
@@ -95,6 +89,17 @@ namespace ReunitePetsWebAPI.Controllers
             _petRepository.DeletePet(petId);
 
             return Ok(pet);
+        }
+
+        // PUT api/Pets/5
+        [HttpPut("{petId}")]
+        public async Task<ActionResult<Pet>> UpadatePetStatusByPetId(int petId, [FromBody] PetStatusUpdateDto pet)
+        {
+            var petToUpdate = _mapper.Map<Pet>(pet);
+
+            await _petRepository.UpadatePetStatusByPetId(petId, petToUpdate.Status);
+
+            return StatusCode(200, "Pet's status is updated successfully.");
         }
     }
 }
