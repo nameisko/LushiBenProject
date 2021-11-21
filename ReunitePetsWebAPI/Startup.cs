@@ -44,11 +44,12 @@ namespace ReunitePetsWebAPI
                 options.AddPolicy(name: MyAllowSpecificOrigins,
                                   builder =>
                                   {
-                                      builder.WithOrigins("http://localhost:3000/");
+                                      builder.WithOrigins("http://localhost:4200");
                                       builder.AllowAnyHeader();
                                       builder.AllowAnyMethod();
 
                                   });
+                });
 
             services.AddScoped<IPetRepository, PetRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
@@ -57,8 +58,7 @@ namespace ReunitePetsWebAPI
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddControllersWithViews()
                     .AddNewtonsoftJson(options =>
-                        options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
-);
+                        options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
