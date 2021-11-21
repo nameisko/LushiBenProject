@@ -29,7 +29,6 @@ namespace ReunitePetsWebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
             services.AddControllers();
             services.AddDbContext<ReunitePetsDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Connection2CityInfoDB")));
@@ -39,17 +38,7 @@ namespace ReunitePetsWebAPI
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ReunitePetsWebAPI", Version = "v1" });
             });
 
-            services.AddCors(options =>
-            {
-                options.AddPolicy(name: MyAllowSpecificOrigins,
-                                  builder =>
-                                  {
-                                      builder.WithOrigins("*");
-                                      builder.AllowAnyHeader();
-                                      builder.AllowAnyMethod();
-
-                                  });
-                });
+            services.AddCors();
 
             services.AddScoped<IPetRepository, PetRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
@@ -64,7 +53,6 @@ namespace ReunitePetsWebAPI
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
             if (env.IsDevelopment())
             {
@@ -75,7 +63,11 @@ namespace ReunitePetsWebAPI
 
             app.UseHttpsRedirection();
 
-            app.UseCors(MyAllowSpecificOrigins);
+            app.UseCors(x => x
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .SetIsOriginAllowed(origin => true)
+                    .AllowCredentials());
 
             app.UseRouting();
 
