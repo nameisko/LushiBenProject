@@ -13,14 +13,16 @@ namespace ReunitePetsWebAPI.Services
         Task<IEnumerable<Pet>> GetPets();
         Task<Pet> GetPetById(int petId, bool includeComments);
         Task<Pet> AddPet(Pet pet);
-        Task UpadatePetStatusByPetId(int petId, string status);
+        Task UpadatePetByPetId(int petId, Pet pet);
         Task DeletePet(int petId);
 
         // Comment
         Task<IEnumerable<Comment>> GetCommentsByPetId(int petId);
         Task<Comment> GetCommentById(int commentId);
         Task<Comment> AddComment(Comment comment);
+        Task UpdateComment(Comment comment);
         Task DeleteComment(int commentId);
+
         Task<bool> Save();
     }
 }

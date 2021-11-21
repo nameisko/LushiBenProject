@@ -62,7 +62,7 @@ namespace ReunitePetsWebAPI.Controllers
         {
             var comments = await _petRepository.GetCommentById(commentId);
 
-            var results = _mapper.Map<IEnumerable<CommentDto>>(comments);
+            var results = _mapper.Map<CommentDto>(comments);
 
             return Ok(results);
         }

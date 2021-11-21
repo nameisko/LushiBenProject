@@ -5,10 +5,9 @@ using System.Threading.Tasks;
 
 namespace ReunitePetsWebAPI.DTOs
 {
-    public class CommentCreateDto
+    public class UserCredentialDto
     {
-        public int PetId { get; set; }
         public string Username { get; set; }
-        public string Content { get; set; }
+        public string Password { get; set; }
     }
 }

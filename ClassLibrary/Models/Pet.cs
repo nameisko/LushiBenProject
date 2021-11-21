@@ -21,7 +21,9 @@ namespace ClassLibrary.Models
         public string LastSeen { get; set; }
         public string Description { get; set; }
         public string Contact { get; set; }
+        public string Username { get; set; }
 
+        public virtual AppUser UsernameNavigation { get; set; }
         public virtual ICollection<Comment> Comments { get; set; }
     }
 }

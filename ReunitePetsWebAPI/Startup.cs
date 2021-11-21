@@ -39,6 +39,7 @@ namespace ReunitePetsWebAPI
             });
 
             services.AddScoped<IPetRepository, PetRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddControllersWithViews()
                     .AddNewtonsoftJson(options =>

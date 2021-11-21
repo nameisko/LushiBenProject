@@ -58,13 +58,20 @@ namespace ReunitePetsWebAPI.Services
             }
         }
 
-        public async Task UpadatePetStatusByPetId(int petId, string status)
+        public async Task UpadatePetByPetId(int petId, Pet pet)
         {
             Pet petToUpdate = await _context.Pets.SingleOrDefaultAsync(p => p.PetId == petId);
 
             if(petToUpdate != null)
             {
-                petToUpdate.Status = status;
+                petToUpdate.Name = pet.Name;
+                petToUpdate.Status = pet.Status;
+                petToUpdate.Type = pet.Type;
+                petToUpdate.Image = pet.Image;
+                petToUpdate.Breed = pet.Breed;
+                petToUpdate.LastSeen = pet.LastSeen;
+                petToUpdate.Description = pet.Description;
+                petToUpdate.Contact = pet.Contact;
                 await _context.SaveChangesAsync();
             }
         }
@@ -87,6 +94,11 @@ namespace ReunitePetsWebAPI.Services
         public async Task<Comment> GetCommentById(int commentId)
         {
             return await _context.Comments.Where(c => c.CommentId == commentId).FirstOrDefaultAsync();
+        }
+
+        public async Task UpdateComment(Comment comment)
+        {
+
         }
 
         public async Task DeleteComment(int commentId)

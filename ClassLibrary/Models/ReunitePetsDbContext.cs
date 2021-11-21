@@ -17,6 +17,7 @@ namespace ClassLibrary.Models
         {
         }
 
+        public virtual DbSet<AppUser> AppUsers { get; set; }
         public virtual DbSet<Comment> Comments { get; set; }
         public virtual DbSet<Pet> Pets { get; set; }
 
@@ -24,24 +25,38 @@ namespace ClassLibrary.Models
         {
             modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
 
+            modelBuilder.Entity<AppUser>(entity =>
+            {
+                entity.HasKey(e => e.Username)
+                    .HasName("PK__AppUser__536C85E5DB397204");
+
+                entity.ToTable("AppUser");
+
+                entity.Property(e => e.Username).HasMaxLength(50);
+
+                entity.Property(e => e.Password)
+                    .IsRequired()
+                    .HasMaxLength(50);
+            });
+
             modelBuilder.Entity<Comment>(entity =>
             {
                 entity.ToTable("Comment");
 
-                entity.Property(e => e.Comment1)
-                    .IsRequired()
-                    .HasMaxLength(500)
-                    .HasColumnName("Comment");
-
                 entity.Property(e => e.CommentDate).HasColumnType("datetime");
 
-                entity.Property(e => e.Commenter)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Content).HasMaxLength(500);
+
+                entity.Property(e => e.Username).HasMaxLength(50);
 
                 entity.HasOne(d => d.Pet)
                     .WithMany(p => p.Comments)
                     .HasForeignKey(d => d.PetId);
+
+                entity.HasOne(d => d.UsernameNavigation)
+                    .WithMany(p => p.Comments)
+                    .HasForeignKey(d => d.Username)
+                    .HasConstraintName("FK_COMMENT_APPUSER_USERNAME");
             });
 
             modelBuilder.Entity<Pet>(entity =>
@@ -71,6 +86,14 @@ namespace ClassLibrary.Models
                 entity.Property(e => e.Type)
                     .IsRequired()
                     .HasMaxLength(10);
+
+                entity.Property(e => e.Username).HasMaxLength(50);
+
+                entity.HasOne(d => d.UsernameNavigation)
+                    .WithMany(p => p.Pets)
+                    .HasForeignKey(d => d.Username)
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .HasConstraintName("FK_PET_USERID");
             });
 
             OnModelCreatingPartial(modelBuilder);

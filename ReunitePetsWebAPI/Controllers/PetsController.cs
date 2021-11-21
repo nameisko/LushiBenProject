@@ -82,18 +82,18 @@ namespace ReunitePetsWebAPI.Controllers
                 return NotFound();
             }
 
-            _petRepository.DeletePet(petId);
+            await _petRepository.DeletePet(petId);
 
             return Ok(pet);
         }
 
         // PUT api/Pets/5
         [HttpPut("{petId}")]
-        public async Task<ActionResult<Pet>> UpadatePetStatusByPetId(int petId, [FromBody] PetStatusUpdateDto pet)
+        public async Task<ActionResult<Pet>> UpadatePetStatusByPetId(int petId, [FromBody] PetWithoutIdDto pet)
         {
-            var petToUpdate = _mapper.Map<Pet>(pet);
+            var petUpdateInfo = _mapper.Map<Pet>(pet);
 
-            await _petRepository.UpadatePetStatusByPetId(petId, petToUpdate.Status);
+            await _petRepository.UpadatePetByPetId(petId, petUpdateInfo);
 
             return StatusCode(200, "Pet's status is updated successfully.");
         }
