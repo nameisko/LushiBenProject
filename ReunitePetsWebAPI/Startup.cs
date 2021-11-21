@@ -44,7 +44,7 @@ namespace ReunitePetsWebAPI
                 options.AddPolicy(name: MyAllowSpecificOrigins,
                                   builder =>
                                   {
-                                      builder.WithOrigins("http://localhost:4200");
+                                      builder.WithOrigins("*");
                                       builder.AllowAnyHeader();
                                       builder.AllowAnyMethod();
 
@@ -64,6 +64,8 @@ namespace ReunitePetsWebAPI
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -72,6 +74,8 @@ namespace ReunitePetsWebAPI
             }
 
             app.UseHttpsRedirection();
+
+            app.UseCors(MyAllowSpecificOrigins);
 
             app.UseRouting();
 
