@@ -16,6 +16,15 @@ namespace ReunitePetsWebAPI.Services
             _context = context;
         }
 
+        public async Task<AppUser> GetUserByUsername(string username)
+        {
+            IQueryable<AppUser> result;
+            
+            result = _context.AppUsers.Where(u => u.Username == username);
+
+            return await result.FirstOrDefaultAsync();
+        }
+
         public async Task<bool> AuthenticateUser(AppUser user)
         {
             if (await UserExists(user.Username))

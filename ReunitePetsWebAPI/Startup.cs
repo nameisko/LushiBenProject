@@ -29,6 +29,7 @@ namespace ReunitePetsWebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
             services.AddControllers();
             services.AddDbContext<ReunitePetsDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Connection2CityInfoDB")));
@@ -37,6 +38,17 @@ namespace ReunitePetsWebAPI
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ReunitePetsWebAPI", Version = "v1" });
             });
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: MyAllowSpecificOrigins,
+                                  builder =>
+                                  {
+                                      builder.WithOrigins("http://localhost:3000/");
+                                      builder.AllowAnyHeader();
+                                      builder.AllowAnyMethod();
+
+                                  });
 
             services.AddScoped<IPetRepository, PetRepository>();
             services.AddScoped<IUserRepository, UserRepository>();

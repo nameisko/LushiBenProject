@@ -19,8 +19,9 @@ namespace ReunitePetsWebAPI.Mappings
             CreateMap<PetWithoutIdDto, Pet>();
             CreateMap<Comment, CommentDto>();
             CreateMap<CommentCreateDto, Comment>();
-            CreateMap<UserCredentialDto, AppUser>();
-            CreateMap<AppUser, UserDto>();
+            CreateMap<UserCreateDto, AppUser>();
+            CreateMap<UserLoginDto, AppUser>();
+            CreateMap<AppUser, UserWithoutPasswordDto>();
             CreateMap<CommentUpdateDto, Comment>();
         }
     }

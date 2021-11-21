@@ -27,7 +27,7 @@ namespace ReunitePetsWebAPI.Controllers
 
         // POST: api/AppUsers/Authenticate
         [HttpPost]
-        public async Task<ActionResult<AppUser>> CreateUser([FromBody] UserCredentialDto user)
+        public async Task<ActionResult<AppUser>> CreateUser([FromBody] UserCreateDto user)
         {
             if (user == null) return BadRequest();
 
@@ -41,6 +41,7 @@ namespace ReunitePetsWebAPI.Controllers
             {
                 AppUser userToInsert = _mapper.Map<AppUser>(user);
                 await _userRepository.CreateUser(userToInsert);
+
                 if (!await _userRepository.Save())
                 {
                     return StatusCode(500, "A problem occured while processing the request");
@@ -54,14 +55,18 @@ namespace ReunitePetsWebAPI.Controllers
 
         // POST: api/AppUsers/Authenticate
         [HttpPost("Authenticate")]
-        public async Task<ActionResult<AppUser>> AuthenticateUser([FromBody] UserCredentialDto appUser)
+        public async Task<ActionResult<AppUser>> AuthenticateUser([FromBody] UserLoginDto appUser)
         {
+            if (appUser == null) return BadRequest();
+
             AppUser userToAuthenticate = _mapper.Map<AppUser>(appUser);
             bool result = await _userRepository.AuthenticateUser(userToAuthenticate);
 
             if (result)
             {
-                var authenticatedUser = _mapper.Map<UserDto>(userToAuthenticate);
+                AppUser userToReturn = await _userRepository.GetUserByUsername(userToAuthenticate.Username);
+                var authenticatedUser = _mapper.Map<UserWithoutPasswordDto>(userToReturn);
+
                 return Ok(authenticatedUser);
             }
             else
