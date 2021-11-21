@@ -17,6 +17,7 @@ namespace ReunitePetsWebAPI.Mappings
             CreateMap<PetWithoutIdDto, Pet>();
             CreateMap<Pet, PetDto>();
             CreateMap<PetStatusUpdateDto, Pet>();
+            CreateMap<Comment, CommentDto>();
         }
     }
 }

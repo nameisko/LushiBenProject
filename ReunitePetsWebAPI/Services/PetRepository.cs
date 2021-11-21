@@ -23,7 +23,6 @@ namespace ReunitePetsWebAPI.Services
         public async Task<IEnumerable<Pet>> GetPets()
         {
             var result = _context.Pets.OrderBy(p => p.PetId);
-
             return await result.ToListAsync();
         }
 
@@ -34,13 +33,9 @@ namespace ReunitePetsWebAPI.Services
             if (includeComments)
             {
                 result = _context.Pets.Include(c => c.Comments)
-                    .Where(p => p.PetId == petId);
+                .Where(c => c.PetId == petId);
             }
-            else
-            {
-                result = _context.Pets.Where(p => p.PetId == petId);
-            }
-            result = _context.Pets.Where(p => p.PetId == petId);
+            else result = _context.Pets.Where(c => c.PetId == petId);
 
             return await result.FirstOrDefaultAsync();
         }
@@ -74,6 +69,12 @@ namespace ReunitePetsWebAPI.Services
             }
         }
 
+        public async Task<IEnumerable<Comment>> GetCommentsByPetId(int petId)
+        {
+            IQueryable<Comment> result = _context.Comments.Where(p => p.PetId == petId);
+            return await result.ToListAsync();
+        }
+
 
         public Task AddCommentForPet(int petId, Comment comment)
         {
@@ -81,17 +82,6 @@ namespace ReunitePetsWebAPI.Services
         }
 
         public void DeleteComment(Comment comment)
-        {
-            throw new NotImplementedException();
-        }
-
-
-        public Task<Comment> GetCommentForPet(int petId, int commentId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<Comment>> GetCommentsByPetId(int petId)
         {
             throw new NotImplementedException();
         }

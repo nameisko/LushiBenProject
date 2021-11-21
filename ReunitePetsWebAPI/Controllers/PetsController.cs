@@ -40,7 +40,7 @@ namespace ReunitePetsWebAPI.Controllers
         [HttpGet("{petId}")]
         public async Task<ActionResult<Pet>> GetPetById(int petId)
         {
-            var pet = await _petRepository.GetPetById(petId, false);
+            var pet = await _petRepository.GetPetById(petId, true);
 
             if(pet == null)
             {
