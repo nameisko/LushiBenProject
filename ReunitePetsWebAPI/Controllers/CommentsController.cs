@@ -75,6 +75,8 @@ namespace ReunitePetsWebAPI.Controllers
         [HttpPut("{commentId}")]
         public async Task<ActionResult<Pet>> UpdateCommentByCommentId(int commentId, [FromBody] CommentUpdateDto comment)
         {
+            if (comment == null) return BadRequest();
+
             var petUpdateInfo = _mapper.Map<Comment>(comment);
 
             await _commentRepository.UpdateComment(commentId, petUpdateInfo);
