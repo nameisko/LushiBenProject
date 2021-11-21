@@ -76,9 +76,12 @@ namespace ReunitePetsWebAPI.Services
         }
 
 
-        public Task AddCommentForPet(int petId, Comment comment)
+        public async Task<Comment> AddComment(Comment comment)
         {
-            throw new NotImplementedException();
+            await _context.Comments.AddAsync(comment);
+            _context.Entry(comment).GetDatabaseValues();
+
+            return comment;
         }
 
         public void DeleteComment(Comment comment)

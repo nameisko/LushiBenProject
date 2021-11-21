@@ -54,25 +54,21 @@ namespace ReunitePetsWebAPI.Controllers
 
         // POST api/Pets
         [HttpPost]
-        public async Task<ActionResult<Pet>> AddPet([FromBody] PetWithoutIdDto pet)
+        public async Task<ActionResult<Pet>> AddPet([FromBody] CommentCreateDto comment)
         {
-            if (pet == null) return BadRequest();
+            if (comment == null) return BadRequest();
 
             if (!ModelState.IsValid) return BadRequest();
 
-            var petToInsert = _mapper.Map<Pet>(pet);
+            var commentToInsert = _mapper.Map<Comment>(comment);
 
-            var petCreated = await _petRepository.AddPet(petToInsert);
+            var commentCreated = await _petRepository.AddComment(commentToInsert);
 
             if (!await _petRepository.Save())
             {
                 return StatusCode(500, "A problem occured while processing the request");
             }
-            return CreatedAtAction(
-                actionName: "GetPetById",
-                routeValues: new { petId = petCreated.PetId, includeComments = false},
-                value: petCreated
-            );
+            return CreatedAtAction(nameof(GetPetById), new { petId = commentCreated.PetId, includeComments = false}, commentCreated);
         }
 
         // DELETE api/Pets/5

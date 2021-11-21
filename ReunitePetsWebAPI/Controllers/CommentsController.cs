@@ -35,5 +35,25 @@ namespace ReunitePetsWebAPI.Controllers
 
             return Ok(results);
         }
+
+        [HttpPost]
+        public async Task<ActionResult<Pet>> AddComment([FromBody] CommentCreateDto comment)
+        {
+            if (comment == null) return BadRequest();
+
+            if (!ModelState.IsValid) return BadRequest();
+
+            var commentToInsert = _mapper.Map<Comment>(comment);
+            commentToInsert.CommentDate = DateTime.Now;
+
+            var commentCreated = await _petRepository.AddComment(commentToInsert);
+
+            if (!await _petRepository.Save())
+            {
+                return StatusCode(500, "A problem occured while processing the request");
+            }
+
+            return StatusCode(200, "Comment is submitted successfully.");
+        }
     }
 }
