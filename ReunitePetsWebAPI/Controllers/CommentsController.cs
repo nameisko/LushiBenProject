@@ -37,7 +37,7 @@ namespace ReunitePetsWebAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Pet>> AddComment([FromBody] CommentCreateDto comment)
+        public async Task<ActionResult<Comment>> AddComment([FromBody] CommentCreateDto comment)
         {
             if (comment == null) return BadRequest();
 
@@ -46,7 +46,7 @@ namespace ReunitePetsWebAPI.Controllers
             var commentToInsert = _mapper.Map<Comment>(comment);
             commentToInsert.CommentDate = DateTime.Now;
 
-            var commentCreated = await _petRepository.AddComment(commentToInsert);
+            await _petRepository.AddComment(commentToInsert);
 
             if (!await _petRepository.Save())
             {
@@ -54,6 +54,33 @@ namespace ReunitePetsWebAPI.Controllers
             }
 
             return StatusCode(200, "Comment is submitted successfully.");
+        }
+
+        // GET: /Comments/1
+        [HttpGet("{commentId}")]
+        public async Task<ActionResult<IEnumerable<Comment>>> GetCommentsById(int commentId)
+        {
+            var comments = await _petRepository.GetCommentById(commentId);
+
+            var results = _mapper.Map<IEnumerable<CommentDto>>(comments);
+
+            return Ok(results);
+        }
+
+        // DELETE api/Comments/5
+        [HttpDelete("{commentId}")]
+        public async Task<ActionResult<Pet>> DeleteComment(int commentId)
+        {
+            Comment comment = await _petRepository.GetCommentById(commentId);
+
+            if (comment == null)
+            {
+                return NotFound();
+            }
+
+            await _petRepository.DeleteComment(commentId);
+
+            return Ok(comment);
         }
     }
 }

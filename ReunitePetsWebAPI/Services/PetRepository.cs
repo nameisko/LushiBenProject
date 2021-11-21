@@ -47,7 +47,7 @@ namespace ReunitePetsWebAPI.Services
 
             return pet;
         }
-        public async void DeletePet(int petId)
+        public async Task DeletePet(int petId)
         {
             Pet petToRemove = await _context.Pets.SingleOrDefaultAsync(p => p.PetId == petId);
 
@@ -84,9 +84,20 @@ namespace ReunitePetsWebAPI.Services
             return comment;
         }
 
-        public void DeleteComment(Comment comment)
+        public async Task<Comment> GetCommentById(int commentId)
         {
-            throw new NotImplementedException();
+            return await _context.Comments.Where(c => c.CommentId == commentId).FirstOrDefaultAsync();
+        }
+
+        public async Task DeleteComment(int commentId)
+        {
+            Comment commentToRemove = await _context.Comments.SingleOrDefaultAsync(c => c.CommentId == commentId);
+
+            if (commentToRemove != null)
+            {
+                _context.Comments.Remove(commentToRemove);
+                await _context.SaveChangesAsync();
+            }
         }
 
         public async Task<bool> Save()
