@@ -9,6 +9,7 @@ using ClassLibrary.Models;
 using ReunitePetsWebAPI.Services;
 using AutoMapper;
 using ReunitePetsWebAPI.DTOs;
+using Microsoft.AspNetCore.Cors;
 
 namespace ReunitePetsWebAPI.Controllers
 {
