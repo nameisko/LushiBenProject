@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace ReunitePetsWebAPI.Services
 {
-    public static class S3BucketService
+    public static class S3BucketOperations
     {
         static AmazonS3Client s3Client = GetAmazonS3Client();
         static readonly string bucketName = "lushibenbucketlab3";

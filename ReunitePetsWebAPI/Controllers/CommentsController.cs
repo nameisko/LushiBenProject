@@ -33,6 +33,7 @@ namespace ReunitePetsWebAPI.Controllers
             return Ok(results);
         }
 
+        // POST: /Comments
         [HttpPost]
         public async Task<ActionResult> AddComment([FromBody] CommentCreateDto comment)
         {
@@ -69,6 +70,7 @@ namespace ReunitePetsWebAPI.Controllers
             return Ok(results);
         }
 
+        // PUT api/Comments/5
         [HttpPut("{commentId}")]
         public async Task<ActionResult> UpdateCommentByCommentId(int commentId, [FromBody] CommentUpdateDto comment)
         {

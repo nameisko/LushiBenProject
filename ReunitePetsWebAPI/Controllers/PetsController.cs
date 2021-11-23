@@ -109,10 +109,11 @@ namespace ReunitePetsWebAPI.Controllers
             return Ok(petToUpdate);
         }
 
+        // POST api/Pets/UploadImage
         [HttpPost("UploadImage")]
         public async Task<IActionResult> UploadImage(IFormFile image)
         {
-            string result = await S3BucketService.UploadImage(image);
+            string result = await S3BucketOperations.UploadImage(image);
             return Ok(result);
         }
     }
