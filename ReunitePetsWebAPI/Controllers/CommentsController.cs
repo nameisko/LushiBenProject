@@ -24,7 +24,7 @@ namespace ReunitePetsWebAPI.Controllers
 
         // GET: /Comments?petId=1
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Comment>>> GetCommentsByPetId(int petId)
+        public async Task<ActionResult> GetCommentsByPetId(int petId)
         {
             var comments = await _commentRepository.GetCommentsByPetId(petId);
 
@@ -34,14 +34,14 @@ namespace ReunitePetsWebAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Comment>> AddComment([FromBody] CommentCreateDto comment)
+        public async Task<ActionResult> AddComment([FromBody] CommentCreateDto comment)
         {
             if (comment == null) return BadRequest();
 
             if (!ModelState.IsValid) return BadRequest();
 
             var commentToInsert = _mapper.Map<Comment>(comment);
-            commentToInsert.CommentDate = DateTime.Now;
+            commentToInsert.CommentDate = TimeZoneInfo.ConvertTimeToUtc(DateTime.Now);
 
             await _commentRepository.AddComment(commentToInsert);
 
@@ -55,7 +55,7 @@ namespace ReunitePetsWebAPI.Controllers
 
         // GET: /Comments/1
         [HttpGet("{commentId}")]
-        public async Task<ActionResult<IEnumerable<Comment>>> GetCommentsById(int commentId)
+        public async Task<ActionResult> GetCommentsById(int commentId)
         {
             var comments = await _commentRepository.GetCommentById(commentId);
 
@@ -70,20 +70,21 @@ namespace ReunitePetsWebAPI.Controllers
         }
 
         [HttpPut("{commentId}")]
-        public async Task<ActionResult<Pet>> UpdateCommentByCommentId(int commentId, [FromBody] CommentUpdateDto comment)
+        public async Task<ActionResult> UpdateCommentByCommentId(int commentId, [FromBody] CommentUpdateDto comment)
         {
             if (comment == null) return BadRequest();
 
-            var petUpdateInfo = _mapper.Map<Comment>(comment);
+            var commentToUpdate = _mapper.Map<Comment>(comment);
+            commentToUpdate.CommentDate = TimeZoneInfo.ConvertTimeToUtc(DateTime.Now);
 
-            await _commentRepository.UpdateComment(commentId, petUpdateInfo);
+            await _commentRepository.UpdateComment(commentId, commentToUpdate);
 
             return StatusCode(200, "Comment is updated successfully.");
         }
 
         // DELETE api/Comments/5
         [HttpDelete("{commentId}")]
-        public async Task<ActionResult<Pet>> DeleteComment(int commentId)
+        public async Task<ActionResult> DeleteComment(int commentId)
         {
             Comment comment = await _commentRepository.GetCommentById(commentId);
 

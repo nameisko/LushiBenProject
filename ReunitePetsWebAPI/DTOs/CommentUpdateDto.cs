@@ -7,6 +7,8 @@ namespace ReunitePetsWebAPI.DTOs
 {
     public class CommentUpdateDto
     {
+        public int PetId { get; set; }
+        public string Username { get; set; }
         public string Content { get; set; }
     }
 }

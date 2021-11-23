@@ -16,5 +16,6 @@ namespace ReunitePetsWebAPI.DTOs
         public string LastSeen { get; set; }
         public string Description { get; set; }
         public string Contact { get; set; }
+        public string Username { get; set; }
     }
 }

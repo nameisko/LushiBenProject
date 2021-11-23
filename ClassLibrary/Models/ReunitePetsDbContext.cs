@@ -79,13 +79,13 @@ namespace ClassLibrary.Models
 
                 entity.Property(e => e.Image).HasMaxLength(500);
 
-                entity.Property(e => e.LastSeen)
-                    .IsRequired()
-                    .HasMaxLength(200);
+                entity.Property(e => e.LastSeen).HasMaxLength(200);
 
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(50);
+
+                entity.Property(e => e.PostDate).HasColumnType("datetime");
 
                 entity.Property(e => e.Status)
                     .IsRequired()

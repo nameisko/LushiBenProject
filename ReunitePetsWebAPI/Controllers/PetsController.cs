@@ -27,7 +27,7 @@ namespace ReunitePetsWebAPI.Controllers
 
         // GET: api/Pets
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Pet>>> GetPets()
+        public async Task<ActionResult> GetPets()
         {
             var pets = await _petRepository.GetPets();
 
@@ -38,11 +38,11 @@ namespace ReunitePetsWebAPI.Controllers
 
         // GET: api/Pets/5
         [HttpGet("{petId}")]
-        public async Task<ActionResult<Pet>> GetPetById(int petId)
+        public async Task<ActionResult> GetPetById(int petId)
         {
             var pet = await _petRepository.GetPetById(petId, true);
 
-            if(pet == null)
+            if (pet == null)
             {
                 return NotFound();
             }
@@ -54,13 +54,15 @@ namespace ReunitePetsWebAPI.Controllers
 
         // POST api/Pets
         [HttpPost]
-        public async Task<ActionResult<Pet>> AddPet([FromBody] PetWithoutIdDto pet)
+        public async Task<ActionResult> AddPet([FromBody] PetWithoutIdDto pet)
         {
             if (pet == null) return BadRequest();
 
             if (!ModelState.IsValid) return BadRequest();
 
-            var petToInsert = _mapper.Map<Pet>(pet);
+            Pet petToInsert = _mapper.Map<Pet>(pet);
+
+            petToInsert.PostDate = TimeZoneInfo.ConvertTimeToUtc(DateTime.Now);
 
             var petInserted = await _petRepository.AddPet(petToInsert);
 
@@ -68,12 +70,13 @@ namespace ReunitePetsWebAPI.Controllers
             {
                 return StatusCode(500, "A problem occured while processing the request");
             }
-            return CreatedAtAction(nameof(GetPetById), new { petId = petInserted.PetId, includeComments = false}, petInserted);
+
+            return CreatedAtAction(nameof(GetPetById), new { petId = petInserted.PetId, includeComments = false }, petInserted);
         }
 
         // DELETE api/Pets/5
         [HttpDelete("{petId}")]
-        public async Task<ActionResult<Pet>> DeletePet(int petId)
+        public async Task<ActionResult> DeletePet(int petId)
         {
             Pet pet = await _petRepository.GetPetById(petId, false);
 
@@ -89,15 +92,28 @@ namespace ReunitePetsWebAPI.Controllers
 
         // PUT api/Pets/5
         [HttpPut("{petId}")]
-        public async Task<ActionResult<Pet>> UpadatePetStatusByPetId(int petId, [FromBody] PetWithoutIdDto pet)
+        public async Task<ActionResult> UpadatePetStatusByPetId(int petId, [FromBody] PetWithoutIdDto pet)
         {
             if (pet == null) return BadRequest();
 
-            var petUpdateInfo = _mapper.Map<Pet>(pet);
+            var petToUpdate = _mapper.Map<Pet>(pet);
+            petToUpdate.PostDate = TimeZoneInfo.ConvertTimeToUtc(DateTime.Now);
 
-            await _petRepository.UpadatePetByPetId(petId, petUpdateInfo);
+            await _petRepository.UpadatePetByPetId(petId, petToUpdate);
 
-            return StatusCode(200, "Pet information is updated successfully.");
+            if (!await _petRepository.Save())
+            {
+                return StatusCode(500, "A problem occured while processing the request");
+            }
+
+            return Ok(petToUpdate);
+        }
+
+        [HttpPost("UploadImage")]
+        public async Task<IActionResult> UploadImage(IFormFile image)
+        {
+            string result = await S3BucketService.UploadImage(image);
+            return Ok(result);
         }
     }
 }

@@ -18,10 +18,11 @@ namespace ClassLibrary.Models
         public string Type { get; set; }
         public string Image { get; set; }
         public string Breed { get; set; }
-        public string LastSeen { get; set; }
         public string Description { get; set; }
         public string Contact { get; set; }
         public string Username { get; set; }
+        public string LastSeen { get; set; }
+        public DateTime? PostDate { get; set; }
 
         public virtual AppUser UsernameNavigation { get; set; }
         public virtual ICollection<Comment> Comments { get; set; }

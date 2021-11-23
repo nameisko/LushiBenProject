@@ -28,7 +28,7 @@ namespace ReunitePetsWebAPI.Controllers
 
         // POST: api/AppUsers/Authenticate
         [HttpPost]
-        public async Task<ActionResult<AppUser>> CreateUser([FromBody] UserCreateDto user)
+        public async Task<ActionResult> CreateUser([FromBody] UserCreateDto user)
         {
             if (user == null) return BadRequest();
 
@@ -56,7 +56,7 @@ namespace ReunitePetsWebAPI.Controllers
 
         // POST: api/AppUsers/Authenticate
         [HttpPost("Authenticate")]
-        public async Task<ActionResult<AppUser>> AuthenticateUser([FromBody] UserLoginDto appUser)
+        public async Task<ActionResult> AuthenticateUser([FromBody] UserLoginDto appUser)
         {
             if (appUser == null) return BadRequest();
 
