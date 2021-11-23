@@ -38,11 +38,16 @@ namespace ReunitePetsWebAPI.Services
         public async Task UpdateComment(int commentId, Comment comment)
         {
             Comment commentToUpdate = await _context.Comments.SingleOrDefaultAsync(c => c.CommentId == commentId);
+            Comment newCommentInfo = new Comment();
 
             if (commentToUpdate != null)
             {
-                commentToUpdate.Content = comment.Content;
-                commentToUpdate.CommentDate = DateTime.Now;
+                newCommentInfo.PetId = commentToUpdate.PetId;
+                newCommentInfo.CommentId = commentToUpdate.CommentId;
+                newCommentInfo.Username = commentToUpdate.Username;
+                newCommentInfo.Content = comment.Content;
+                newCommentInfo.CommentDate = DateTime.Now;
+                _context.Entry(commentToUpdate).CurrentValues.SetValues(newCommentInfo);
                 await _context.SaveChangesAsync();
             }
         }

@@ -60,17 +60,20 @@ namespace ReunitePetsWebAPI.Services
         public async Task UpadatePetByPetId(int petId, Pet pet)
         {
             Pet petToUpdate = await _context.Pets.SingleOrDefaultAsync(p => p.PetId == petId);
-
+            Pet newPetInfo = new Pet();
             if(petToUpdate != null)
             {
-                petToUpdate.Name = pet.Name;
-                petToUpdate.Status = pet.Status;
-                petToUpdate.Type = pet.Type;
-                petToUpdate.Image = pet.Image;
-                petToUpdate.Breed = pet.Breed;
-                petToUpdate.LastSeen = pet.LastSeen;
-                petToUpdate.Description = pet.Description;
-                petToUpdate.Contact = pet.Contact;
+                newPetInfo.PetId = petToUpdate.PetId;
+                newPetInfo.Username = petToUpdate.Username;
+                newPetInfo.Name = pet.Name;
+                newPetInfo.Status = pet.Status;
+                newPetInfo.Type = pet.Type;
+                newPetInfo.Image = pet.Image;
+                newPetInfo.Breed = pet.Breed;
+                newPetInfo.LastSeen = pet.LastSeen;
+                newPetInfo.Description = pet.Description;
+                newPetInfo.Contact = pet.Contact;
+                _context.Entry(petToUpdate).CurrentValues.SetValues(newPetInfo);
                 await _context.SaveChangesAsync();
             }
         }

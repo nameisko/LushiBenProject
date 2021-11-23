@@ -101,10 +101,6 @@ namespace ReunitePetsWebAPI.Controllers
 
             await _petRepository.UpadatePetByPetId(petId, petToUpdate);
 
-            if (!await _petRepository.Save())
-            {
-                return StatusCode(500, "A problem occured while processing the request");
-            }
 
             return Ok(petToUpdate);
         }
