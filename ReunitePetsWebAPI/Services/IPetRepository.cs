@@ -10,8 +10,7 @@ namespace ReunitePetsWebAPI.Services
         Task<IEnumerable<Pet>> GetPets();
         Task<Pet> GetPetById(int petId, bool includeComments);
 
-        Task<IEnumerable<Pet>> GetPetsByType(string petType);
-        Task<IEnumerable<Pet>> GetPetsByStatus(string petStatus);
+        Task<IEnumerable<Pet>> GetPetsByTypeAndStatus(string type, string status);
         Task<Pet> AddPet(Pet pet);
         Task UpadatePetByPetId(int petId, Pet pet);
         Task DeletePet(int petId);

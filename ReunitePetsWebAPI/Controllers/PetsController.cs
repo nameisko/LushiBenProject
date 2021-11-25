@@ -53,21 +53,10 @@ namespace ReunitePetsWebAPI.Controllers
         }
 
         // GET api/Pets?petType=Dog
-        [HttpGet("filterType")]
-        public async Task<ActionResult> GetPetsByType(string petType)
+        [HttpGet("filter")]
+        public async Task<ActionResult> GetPetsByType(string type, string status)
         {
-            var pets = await _petRepository.GetPetsByType(petType);
-
-            var results = _mapper.Map<IEnumerable<PetWithoutCommentsDto>>(pets);
-
-            return Ok(results);
-        }
-
-        // GET api/Pets/?petStatus=Dog
-        [HttpGet("filterStatus")]
-        public async Task<ActionResult> GetPetsByStatus(string petStatus)
-        {
-            var pets = await _petRepository.GetPetsByStatus(petStatus);
+            var pets = await _petRepository.GetPetsByTypeAndStatus(type, status);
 
             var results = _mapper.Map<IEnumerable<PetWithoutCommentsDto>>(pets);
 

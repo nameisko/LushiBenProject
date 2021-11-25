@@ -1,0 +1,20 @@
+
+{
+    "region" : "us-east-1",
+    "configuration" : "Debug",
+    "framework"     : "net5.0",
+    "self-contained" : false,
+    "application"    : "ReunitePetsWebAPI",
+    "environment"    : "ReunitePetsWebAPI-dev",
+    "enable-xray"    : false,
+    "enhanced-health-type" : "basic",
+    "additional-options"   : "\"aws:autoscaling:launchconfiguration,SecurityGroups\"=\"sg-06956fae21653bb64,sg-09cb6fdd36fbc1512\";\"aws:ec2:vpc,Subnets\"=\"subnet-0ab1a24a994a72084\"",
+    "solution-stack"       : "64bit Amazon Linux 2 v2.2.8 running .NET Core",
+    "environment-type"     : "SingleInstance",
+    "cname"                : "reunitepetswebapi-dev",
+    "instance-type"        : "t2.micro",
+    "key-pair"             : "key4lushi",
+    "instance-profile"     : "aws-elasticbeanstalk-ec2-role",
+    "service-role"         : "aws-elasticbeanstalk-service-role",
+    "proxy-server"         : "nginx"
+}

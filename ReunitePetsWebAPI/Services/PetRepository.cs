@@ -21,7 +21,7 @@ namespace ReunitePetsWebAPI.Services
 
         public async Task<IEnumerable<Pet>> GetPets()
         {
-            var result = _context.Pets.OrderBy(p => p.PetId);
+            var result = _context.Pets.OrderBy(p => p.PostDate);
             return await result.ToListAsync();
         }
 
@@ -39,16 +39,26 @@ namespace ReunitePetsWebAPI.Services
             return await result.FirstOrDefaultAsync();
         }
 
-        public async Task<IEnumerable<Pet>> GetPetsByType(string petType)
+        public async Task<IEnumerable<Pet>> GetPetsByTypeAndStatus(string type, string status)
         {
-            IQueryable<Pet> result =  _context.Pets.Where(p => p.Type == petType);
+            IQueryable<Pet> result;
 
-            return await result.ToListAsync();
-        }
-
-        public async Task<IEnumerable<Pet>> GetPetsByStatus(string petStatus)
-        {
-            IQueryable<Pet> result = _context.Pets.Where(p => p.Status == petStatus);
+            if (type == "All" && status == "All")
+            {
+                result = _context.Pets.OrderBy(p => p.PostDate);
+            }
+            else if(type == "All")
+            {
+                 result = _context.Pets.Where(p => p.Status == status);
+            }
+            else if(status == "All")
+            {
+                result = _context.Pets.Where(p => p.Type == type);
+            }
+            else
+            {
+                result = _context.Pets.Where(p => p.Type == type && p.Status == status);
+            }
 
             return await result.ToListAsync();
         }
