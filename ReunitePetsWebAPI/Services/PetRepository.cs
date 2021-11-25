@@ -39,6 +39,20 @@ namespace ReunitePetsWebAPI.Services
             return await result.FirstOrDefaultAsync();
         }
 
+        public async Task<IEnumerable<Pet>> GetPetsByType(string petType)
+        {
+            IQueryable<Pet> result =  _context.Pets.Where(p => p.Type == petType);
+
+            return await result.ToListAsync();
+        }
+
+        public async Task<IEnumerable<Pet>> GetPetsByStatus(string petStatus)
+        {
+            IQueryable<Pet> result = _context.Pets.Where(p => p.Status == petStatus);
+
+            return await result.ToListAsync();
+        }
+
         public async Task<Pet> AddPet(Pet pet)
         {
             await _context.Pets.AddAsync(pet);

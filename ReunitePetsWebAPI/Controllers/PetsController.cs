@@ -52,6 +52,28 @@ namespace ReunitePetsWebAPI.Controllers
             return Ok(petWithoutCommentsResult);
         }
 
+        // GET api/Pets?petType=Dog
+        [HttpGet("filterType")]
+        public async Task<ActionResult> GetPetsByType(string petType)
+        {
+            var pets = await _petRepository.GetPetsByType(petType);
+
+            var results = _mapper.Map<IEnumerable<PetWithoutCommentsDto>>(pets);
+
+            return Ok(results);
+        }
+
+        // GET api/Pets/?petStatus=Dog
+        [HttpGet("filterStatus")]
+        public async Task<ActionResult> GetPetsByStatus(string petStatus)
+        {
+            var pets = await _petRepository.GetPetsByStatus(petStatus);
+
+            var results = _mapper.Map<IEnumerable<PetWithoutCommentsDto>>(pets);
+
+            return Ok(results);
+        }
+
         // POST api/Pets
         [HttpPost]
         public async Task<ActionResult> AddPet([FromBody] PetWithoutIdDto pet)
