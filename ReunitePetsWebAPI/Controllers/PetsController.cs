@@ -52,7 +52,7 @@ namespace ReunitePetsWebAPI.Controllers
             return Ok(petWithoutCommentsResult);
         }
 
-        // GET api/Pets?petType=Dog
+        // GET api/Pets/filter?type=Dog&status=Lost
         [HttpGet("filter")]
         public async Task<ActionResult> GetPetsByType(string type, string status)
         {
